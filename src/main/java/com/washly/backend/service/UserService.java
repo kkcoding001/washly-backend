@@ -34,4 +34,29 @@ public class UserService {
 
         return userRepository.save(user);
     }
+    
+    
+    public User authenticateUser(String email, String password) {
+
+        User user = userRepository.findByEmail(
+                email.trim().toLowerCase())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid email or password"));
+
+        // password verification
+        
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException(
+                    "Invalid email or password");
+        }
+
+        if (!user.isActive()) {
+            throw new IllegalArgumentException(
+                    "Invalid email or password");
+        }
+
+        return user;
+    }
+    
+    
 }
