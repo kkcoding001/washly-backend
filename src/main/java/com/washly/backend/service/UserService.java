@@ -59,4 +59,25 @@ public class UserService {
     }
     
     
+    // create staff by Admin 
+	public User createStaff(User staff) {
+	
+	    String email = staff.getEmail().trim().toLowerCase();
+	
+	    if (userRepository.existsByEmail(email)) {
+	        throw new IllegalArgumentException(
+	                "Email is already registered");
+	    }
+	
+	    staff.setEmail(email);
+	    staff.setPassword(
+	            passwordEncoder.encode(staff.getPassword()));
+	    staff.setRole(Role.STAFF);
+	    staff.setActive(true);
+	
+	    return userRepository.save(staff);
+	}
+
+    
+    
 }
